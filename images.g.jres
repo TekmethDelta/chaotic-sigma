@@ -1,0 +1,12 @@
+{
+    "image1": {
+        "data": "hwQQABAAAAAAAAcAAHcAAAAAd3d3cHcHcAAAAHcHeHd2eHd3d8d4B3AHgACIyHiHAHcHx3eIdwgABgfGfIZ8B3AHcIfMzGwHdwAAh3d2dwcAd3CHfId2B4B3cHaIZ3eHeHdwiHd3d3d3d3DMyHh3dwhwcMfMiHgAAHAAdwd3cAAAAAAAdwAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "electricbogalo"
+    },
+    "*": {
+        "mimeType": "image/x-mkcd-f4",
+        "dataEncoding": "base64",
+        "namespace": "myImages"
+    }
+}
