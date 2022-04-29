@@ -11,48 +11,6 @@ namespace SpriteKind {
     export const Weak = SpriteKind.create()
     export const Unkillable = SpriteKind.create()
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    scene.cameraShake(4, 500)
-    Sigma.setImage(img`
-        . . . . . . . . . . . . . . . . 
-        . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
-        . 2 2 2 2 f f f f f 2 2 f 2 2 . 
-        . 2 f 2 2 f 2 2 2 f f f f 2 2 . 
-        . 2 f 2 2 2 2 2 2 2 2 2 2 f 2 . 
-        . 2 f 2 2 2 f 2 2 f f 2 2 2 2 . 
-        . 2 f f 2 f 2 2 2 2 f f f f 2 . 
-        . 2 f 2 f 2 2 2 2 2 2 f f 2 2 . 
-        . 2 2 2 f 2 2 2 2 2 2 f f 2 2 . 
-        . 2 2 2 2 2 2 2 2 f 2 2 f 2 2 . 
-        . 2 2 2 2 f 2 2 f f f 2 f 2 2 . 
-        . 2 2 2 2 2 f 2 2 2 f f f f 2 . 
-        . 2 f 2 2 2 2 2 2 2 2 2 2 f 2 . 
-        . 2 f f 2 2 2 f 2 f f f 2 f 2 . 
-        . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
-        . . . . . . . . . . . . . . . . 
-        `)
-    info.changeLifeBy(-100)
-    pause(100)
-    Sigma.setImage(img`
-        . . . . . . . . . . . . . . . . 
-        . f f f f f f f f f f f f f f . 
-        . f 2 2 2 a a a a a 7 7 a 7 f . 
-        . f 5 2 2 a 7 7 7 a a a a 7 f . 
-        . f 5 2 f f f f f f f f 7 a f . 
-        . f 5 2 2 f a 7 7 a a 7 7 7 f . 
-        . f 5 5 2 5 f f 9 9 1 1 1 a f . 
-        . f 5 2 5 2 2 9 f 9 9 1 1 7 f . 
-        . f 2 2 5 2 2 9 9 f 9 1 1 7 f . 
-        . f 2 8 2 2 9 9 f 1 9 9 1 7 f . 
-        . f 8 9 9 1 f f 1 1 1 9 1 7 f . 
-        . f 8 8 9 f 1 9 9 9 1 1 1 a f . 
-        . f c b f f f f f f f f 7 a f . 
-        . f c c b b b c b a a a 7 a f . 
-        . f f f f f f f f f f f f f f . 
-        . . . . . . . . . . . . . . . . 
-        `)
-    pause(1000)
-})
 function Number2 () {
     for (let value of sprites.allOfKind(SpriteKind.Enemy)) {
         value.destroy()
@@ -401,19 +359,40 @@ function Levels (levelnum: number) {
         tiles.replaceAllTiles(sprites.castle.tileGrass1, assets.tile`transparency16`)
     }
 }
-scene.onHitWall(SpriteKind.Freeze, function (sprite, location) {
-    sprite.destroy()
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (Sigma.vy == 0) {
+        Sigma.vy = -175
+    }
 })
-sprites.onOverlap(SpriteKind.Fire, SpriteKind.Frozen, function (sprite, otherSprite) {
-    otherSprite.destroy(effects.blizzard, 500)
-})
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile4`, function (sprite, location) {
-    currentlevel += 3
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
+    currentlevel += 1
     choose()
 })
-scene.onOverlapTile(SpriteKind.Freeze, assets.tile`myTile0`, function (sprite, location) {
-    tiles.setTileAt(location, assets.tile`myTile5`)
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    Second_poweup(Power_up_2)
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.first, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.spray, 500)
+    game.splash("This number has been erased.")
+    powerup = 0
+})
+sprites.onOverlap(SpriteKind.bomb, SpriteKind.enemy2, function (sprite, otherSprite) {
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -1
+    info.changeLifeBy(1)
+})
+scene.onOverlapTile(SpriteKind.Projectile, assets.tile`myTile2`, function (sprite, location) {
+    tiles.setTileAt(location, assets.tile`myTile3`)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Unkillable, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+})
+function choose () {
+    tiles.setTilemap(tilemap`level4`)
+    Number1()
+    Number2()
+    tiles.placeOnRandomTile(Sigma, sprites.dungeon.collectibleInsignia)
+    game.splash("You may choose to delete a number")
+}
 sprites.onOverlap(SpriteKind.Freeze, SpriteKind.enemy2, function (sprite, otherSprite) {
     otherSprite.setImage(img`
         . . . . . . 9 9 9 9 9 9 9 . . . 
@@ -462,36 +441,6 @@ sprites.onOverlap(SpriteKind.Freeze, SpriteKind.enemy2, function (sprite, otherS
     )
     otherSprite.setKind(SpriteKind.enemy2)
 })
-controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (Sigma.vy == 0) {
-        Sigma.vy = -175
-    }
-})
-scene.onOverlapTile(SpriteKind.Fire, assets.tile`myTile`, function (sprite, location) {
-    tiles.setTileAt(location, assets.tile`myTile4`)
-})
-info.onLifeZero(function () {
-    game.over(false)
-})
-sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Frozen, function (sprite, otherSprite) {
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -20
-    sprite.destroy()
-})
-function choose () {
-    tiles.setTilemap(tilemap`level4`)
-    Number1()
-    Number2()
-    tiles.placeOnRandomTile(Sigma, sprites.dungeon.collectibleInsignia)
-    game.splash("You may choose to delete a number")
-}
-scene.onOverlapTile(SpriteKind.bomb, assets.tile`myTile1`, function (sprite, location) {
-    tiles.setTileAt(location, assets.tile`myTile6`)
-})
-sprites.onOverlap(SpriteKind.Freeze, SpriteKind.Weak, function (sprite, otherSprite) {
-    statusbar2.value += -30
-    scene.cameraShake(4, 500)
-    sprite.destroy()
-})
 function Chacha_slide () {
     for (let value of tiles.getTilesByType(sprites.castle.tilePath8)) {
         Enemy_side = sprites.create(img`
@@ -529,6 +478,9 @@ function Chacha_slide () {
         statusbar.attachToSprite(Enemy_side)
     }
 }
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    First_powerup(powerup)
+})
 function Second_poweup (Y: number) {
     if (Right_face == true) {
         if (4 == Y) {
@@ -639,7 +591,6 @@ function Second_poweup (Y: number) {
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 `, Sigma, -100, 0)
-            pause(1500)
         } else if (3 == Y) {
             flame = sprites.create(img`
                 . . . . . . . . . . . . . . . . 
@@ -711,43 +662,123 @@ function Second_poweup (Y: number) {
         }
     }
 }
-sprites.onOverlap(SpriteKind.Fire, SpriteKind.Enemy, function (sprite, otherSprite) {
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -2
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile4`, function (sprite, location) {
+    currentlevel += 3
+    choose()
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.dooF, function (sprite, otherSprite) {
-    otherSprite.destroy(effects.warmRadial, 500)
-    Second_Dice(randint(1, 4))
-})
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    First_powerup(powerup)
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.second, function (sprite, otherSprite) {
-    otherSprite.destroy(effects.spray, 500)
-    game.splash("This number has been erased.")
-    Power_up_2 = 0
+sprites.onOverlap(SpriteKind.bomb, SpriteKind.Weak, function (sprite, otherSprite) {
+    statusbar2.value += -4
+    scene.cameraShake(4, 500)
+    info.changeLifeBy(1)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.enemy2, function (sprite, otherSprite) {
     info.changeLifeBy(-100)
     pause(1000)
 })
-controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    Second_poweup(Power_up_2)
+controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
+    Right_face = false
+    animation.runImageAnimation(
+    Sigma,
+    [img`
+        . . . . . 4 4 4 4 . . . . . . . 
+        . . . 4 4 5 4 4 4 4 . . . . . . 
+        . . . 4 5 5 4 4 4 4 . . . . . . 
+        . . 4 5 f 5 5 5 4 4 4 . . . . . 
+        . . 4 5 f 5 5 5 4 4 4 . . . . . 
+        . . 4 5 5 5 5 5 4 4 4 . . . . . 
+        . . 4 f f 5 5 5 4 f 4 . . . . . 
+        . . 4 5 5 5 5 5 4 f 4 . . . . . 
+        . . 4 f f f 5 5 4 f 4 . . . . . 
+        . . 4 f 5 5 5 5 4 f 4 . . . . . 
+        . . 4 f f f 5 5 4 4 4 . . . . . 
+        . . . 4 f 5 4 4 4 4 . . . . . . 
+        . . . 4 4 f 4 4 4 4 . . . . . . 
+        . . . . . 4 4 4 4 . . . . . . . 
+        . . . . . . f f . . . . . . . . 
+        . . . . . f f f . . . . . . . . 
+        `,img`
+        . . . . . 4 4 4 4 . . . . . . . 
+        . . . 4 4 5 4 4 4 4 . . . . . . 
+        . . . 4 5 5 4 4 4 4 . . . . . . 
+        . . 4 5 f 5 5 5 4 4 4 . . . . . 
+        . . 4 5 f 5 5 5 4 4 4 . . . . . 
+        . . 4 5 5 5 5 5 4 4 4 . . . . . 
+        . . 4 f f 5 5 5 4 f 4 . . . . . 
+        . . 4 5 5 5 5 5 4 f 4 . . . . . 
+        . . 4 f f f 5 5 4 f 4 . . . . . 
+        . . 4 f 5 5 5 5 f 4 4 . . . . . 
+        . . 4 f f f 5 5 4 4 4 . . . . . 
+        . . . 4 f 5 4 4 4 4 . . . . . . 
+        . . . 4 4 f 4 4 4 4 . . . . . . 
+        . . . . . 4 4 4 4 . . . . . . . 
+        . . . . . . f f . . . . . . . . 
+        . . . . . f f . . . . . . . . . 
+        `,img`
+        . . . . . 4 4 4 4 . . . . . . . 
+        . . . 4 4 5 4 4 4 4 . . . . . . 
+        . . . 4 5 5 4 4 4 4 . . . . . . 
+        . . 4 5 f 5 5 5 4 4 4 . . . . . 
+        . . 4 5 f 5 5 5 4 4 4 . . . . . 
+        . . 4 5 5 5 5 5 4 4 4 . . . . . 
+        . . 4 f f 5 5 5 4 f 4 . . . . . 
+        . . 4 5 5 5 5 5 4 f 4 . . . . . 
+        . . 4 f f f 5 5 f 4 4 . . . . . 
+        . . 4 f 5 5 5 f 4 4 4 . . . . . 
+        . . 4 f f f 5 5 4 4 4 . . . . . 
+        . . . 4 f 5 4 4 4 4 . . . . . . 
+        . . . 4 4 f 4 4 4 4 . . . . . . 
+        . . . . . 4 4 4 4 . . . . . . . 
+        . . . . . . f f . . . . . . . . 
+        . . . . . . f . . . . . . . . . 
+        `,img`
+        . . . . . 4 4 4 4 . . . . . . . 
+        . . . 4 4 5 4 4 4 4 . . . . . . 
+        . . . 4 5 5 4 4 4 4 . . . . . . 
+        . . 4 5 f 5 5 5 4 4 4 . . . . . 
+        . . 4 5 f 5 5 5 4 4 4 . . . . . 
+        . . 4 5 5 5 5 5 4 4 4 . . . . . 
+        . . 4 f f 5 5 5 4 f 4 . . . . . 
+        . . 4 5 5 5 5 5 4 f 4 . . . . . 
+        . . 4 f f f 5 5 4 f 4 . . . . . 
+        . . 4 f 5 5 5 5 f 4 4 . . . . . 
+        . . 4 f f f 5 5 4 4 4 . . . . . 
+        . . . 4 f 5 4 4 4 4 . . . . . . 
+        . . . 4 4 f 4 4 4 4 . . . . . . 
+        . . . . . 4 4 4 4 . . . . . . . 
+        . . . . . . f f . . . . . . . . 
+        . . . . . f f . . . . . . . . . 
+        `],
+    200,
+    true
+    )
 })
-sprites.onOverlap(SpriteKind.Projectile, SpriteKind.enemy2, function (sprite, otherSprite) {
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -10
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairWest, function (sprite, location) {
+    Levels(currentlevel)
+    if (fnumber) {
+        fnumber.destroy()
+    }
+    if (snumber) {
+        snumber.destroy()
+    }
+})
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile3`, function (sprite, location) {
+    currentlevel += 4
+    choose()
+})
+sprites.onOverlap(SpriteKind.Freeze, SpriteKind.Weak, function (sprite, otherSprite) {
+    statusbar2.value += -30
+    scene.cameraShake(4, 500)
     sprite.destroy()
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Unkillable, function (sprite, otherSprite) {
-    info.changeLifeBy(-1)
+scene.onOverlapTile(SpriteKind.Freeze, assets.tile`myTile0`, function (sprite, location) {
+    tiles.setTileAt(location, assets.tile`myTile5`)
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.first, function (sprite, otherSprite) {
-    otherSprite.destroy(effects.spray, 500)
-    game.splash("This number has been erased.")
-    powerup = 0
+sprites.onOverlap(SpriteKind.Player, SpriteKind.dooF, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.warmRadial, 500)
+    Second_Dice(randint(1, 4))
 })
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile5`, function (sprite, location) {
-    currentlevel += 2
-    choose()
+statusbars.onZero(StatusBarKind.EnemyHealth, function (status) {
+    status.spriteAttachedTo().destroy(effects.spray, 500)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Weak, function (sprite, otherSprite) {
     statusbar2.value += -20
@@ -886,18 +917,91 @@ function Number1 () {
     }
     tiles.placeOnRandomTile(fnumber, sprites.dungeon.floorLight5)
 }
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
-    currentlevel += 1
-    choose()
+scene.onHitWall(SpriteKind.Freeze, function (sprite, location) {
+    sprite.destroy()
 })
-sprites.onOverlap(SpriteKind.bomb, SpriteKind.enemy2, function (sprite, otherSprite) {
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -1
-    info.changeLifeBy(1)
+scene.onHitWall(SpriteKind.Fire, function (sprite, location) {
+    sprite.destroy()
 })
-sprites.onOverlap(SpriteKind.bomb, SpriteKind.Weak, function (sprite, otherSprite) {
-    statusbar2.value += -4
-    scene.cameraShake(4, 500)
-    info.changeLifeBy(1)
+controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    Right_face = true
+    animation.runImageAnimation(
+    Sigma,
+    [img`
+        . . . . . . . 4 4 4 4 . . . . . 
+        . . . . . . 4 4 4 4 5 4 4 . . . 
+        . . . . . . 4 4 4 4 5 5 4 . . . 
+        . . . . . 4 4 4 5 5 5 f 5 4 . . 
+        . . . . . 4 4 4 5 5 5 f 5 4 . . 
+        . . . . . 4 4 4 5 5 5 5 5 4 . . 
+        . . . . . 4 f 4 5 5 5 f f 4 . . 
+        . . . . . 4 f 4 5 5 5 5 5 4 . . 
+        . . . . . 4 f 4 5 5 f f f 4 . . 
+        . . . . . 4 f 4 5 5 5 5 f 4 . . 
+        . . . . . 4 4 4 5 5 f f f 4 . . 
+        . . . . . . 4 4 4 4 5 f 4 . . . 
+        . . . . . . 4 4 4 4 f 4 4 . . . 
+        . . . . . . . 4 4 4 4 . . . . . 
+        . . . . . . . . f f . . . . . . 
+        . . . . . . . . f f f . . . . . 
+        `,img`
+        . . . . . . . 4 4 4 4 . . . . . 
+        . . . . . . 4 4 4 4 5 4 4 . . . 
+        . . . . . . 4 4 4 4 5 5 4 . . . 
+        . . . . . 4 4 4 5 5 5 f 5 4 . . 
+        . . . . . 4 4 4 5 5 5 f 5 4 . . 
+        . . . . . 4 4 4 5 5 5 5 5 4 . . 
+        . . . . . 4 f 4 5 5 5 f f 4 . . 
+        . . . . . 4 f 4 5 5 5 5 5 4 . . 
+        . . . . . 4 f 4 5 5 f f f 4 . . 
+        . . . . . 4 4 f 5 5 5 5 f 4 . . 
+        . . . . . 4 4 4 5 5 f f f 4 . . 
+        . . . . . . 4 4 4 4 5 f 4 . . . 
+        . . . . . . 4 4 4 4 f 4 4 . . . 
+        . . . . . . . 4 4 4 4 . . . . . 
+        . . . . . . . . f f . . . . . . 
+        . . . . . . . . . f f . . . . . 
+        `,img`
+        . . . . . . . 4 4 4 4 . . . . . 
+        . . . . . . 4 4 4 4 5 4 4 . . . 
+        . . . . . . 4 4 4 4 5 5 4 . . . 
+        . . . . . 4 4 4 5 5 5 f 5 4 . . 
+        . . . . . 4 4 4 5 5 5 f 5 4 . . 
+        . . . . . 4 4 4 5 5 5 5 5 4 . . 
+        . . . . . 4 f 4 5 5 5 f f 4 . . 
+        . . . . . 4 f 4 5 5 5 5 5 4 . . 
+        . . . . . 4 4 f 5 5 f f f 4 . . 
+        . . . . . 4 4 4 f 5 5 5 f 4 . . 
+        . . . . . 4 4 4 5 5 f f f 4 . . 
+        . . . . . . 4 4 4 4 5 f 4 . . . 
+        . . . . . . 4 4 4 4 f 4 4 . . . 
+        . . . . . . . 4 4 4 4 . . . . . 
+        . . . . . . . . f f . . . . . . 
+        . . . . . . . . . f . . . . . . 
+        `,img`
+        . . . . . . . 4 4 4 4 . . . . . 
+        . . . . . . 4 4 4 4 5 4 4 . . . 
+        . . . . . . 4 4 4 4 5 5 4 . . . 
+        . . . . . 4 4 4 5 5 5 f 5 4 . . 
+        . . . . . 4 4 4 5 5 5 f 5 4 . . 
+        . . . . . 4 4 4 5 5 5 5 5 4 . . 
+        . . . . . 4 f 4 5 5 5 f f 4 . . 
+        . . . . . 4 f 4 5 5 5 5 5 4 . . 
+        . . . . . 4 f 4 5 5 f f f 4 . . 
+        . . . . . 4 4 f 5 5 5 5 f 4 . . 
+        . . . . . 4 4 4 5 5 f f f 4 . . 
+        . . . . . . 4 4 4 4 5 f 4 . . . 
+        . . . . . . 4 4 4 4 f 4 4 . . . 
+        . . . . . . . 4 4 4 4 . . . . . 
+        . . . . . . . . f f . . . . . . 
+        . . . . . . . . . f f . . . . . 
+        `],
+    200,
+    true
+    )
+})
+sprites.onOverlap(SpriteKind.Fire, SpriteKind.Enemy, function (sprite, otherSprite) {
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -2
 })
 function Level_Start () {
     Enemyset()
@@ -936,12 +1040,12 @@ function Enemyset () {
         statusbar.attachToSprite(Enemy_up_down)
     }
 }
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile3`, function (sprite, location) {
-    currentlevel += 4
-    choose()
+sprites.onOverlap(SpriteKind.bomb, SpriteKind.Enemy, function (sprite, otherSprite) {
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -1
+    info.changeLifeBy(1)
 })
-controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    Sigma.vy = 200
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.hazardWater, function (sprite, location) {
+    game.over(false)
 })
 function First_dice (X: number) {
     if (1 == X) {
@@ -959,60 +1063,36 @@ function First_dice (X: number) {
     }
     game.splash("press A to activate")
 }
-sprites.onOverlap(SpriteKind.bomb, SpriteKind.Enemy, function (sprite, otherSprite) {
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -1
-    info.changeLifeBy(1)
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Frozen, function (sprite, otherSprite) {
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -20
+    sprite.destroy()
 })
-controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    Right_face = true
-    Sigma.setImage(img`
-        . . . . . . . . . . . . . . . . 
-        . f f f f f f f f f f f f f f . 
-        . f 2 2 2 a a a a a 7 7 a 7 f . 
-        . f 5 2 2 a 7 7 7 a a a a 7 f . 
-        . f 5 2 f f f f f f f f 7 a f . 
-        . f 5 2 2 f a 7 7 a a 7 7 7 f . 
-        . f 5 5 2 5 f f 9 9 1 1 1 a f . 
-        . f 5 2 5 2 2 9 f 9 9 1 1 7 f . 
-        . f 2 2 5 2 2 9 9 f 9 1 1 7 f . 
-        . f 2 8 2 2 9 9 f 1 9 9 1 7 f . 
-        . f 8 9 9 1 f f 1 1 1 9 1 7 f . 
-        . f 8 8 9 f 1 9 9 9 1 1 1 a f . 
-        . f c b f f f f f f f f 7 a f . 
-        . f c c b b b c b a a a 7 a f . 
-        . f f f f f f f f f f f f f f . 
-        . . . . . . . . . . . . . . . . 
-        `)
+scene.onOverlapTile(SpriteKind.bomb, assets.tile`myTile1`, function (sprite, location) {
+    tiles.setTileAt(location, assets.tile`myTile6`)
+})
+controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+    Sigma.vy = 200
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.enemy2, function (sprite, otherSprite) {
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -10
+    sprite.destroy()
+})
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile5`, function (sprite, location) {
+    currentlevel += 2
+    choose()
+})
+sprites.onOverlap(SpriteKind.Fire, SpriteKind.Weak, function (sprite, otherSprite) {
+    statusbar2.value += -6
+    scene.cameraShake(4, 500)
+})
+info.onLifeZero(function () {
+    game.over(false)
+})
+scene.onOverlapTile(SpriteKind.Fire, assets.tile`myTile`, function (sprite, location) {
+    tiles.setTileAt(location, assets.tile`myTile4`)
 })
 sprites.onOverlap(SpriteKind.Fire, SpriteKind.enemy2, function (sprite, otherSprite) {
     statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -2
-})
-statusbars.onZero(StatusBarKind.Energy, function (status) {
-    Weakspot.setKind(SpriteKind.hollow)
-    Weakspot.setImage(img`
-        . . . . f f f f f f f . . . . . 
-        . . f f b b b f b b b f f . . . 
-        . f b b b b b f b b b b b f . . 
-        . f b b b b b f b b b b b f . . 
-        f b b b b b f f f b b b b b f . 
-        f b b b b b f f f b b b b b f . 
-        f b b b b b f f f b b b b b f . 
-        f f f f f f f f f f f f f f f . 
-        f b b b b b f f f b b b b b f . 
-        f b b b b b f f f b b b b b f . 
-        f b b b b b f f f b b b b b f . 
-        . f b b b b b f b b b b b f . . 
-        . f b b b b b f b b b b b f . . 
-        . . f f b b b f b b b f f . . . 
-        . . . . f f f f f f f . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `)
-})
-scene.onHitWall(SpriteKind.Fire, function (sprite, location) {
-    sprite.destroy()
-})
-statusbars.onZero(StatusBarKind.EnemyHealth, function (status) {
-    status.spriteAttachedTo().destroy(effects.spray, 500)
 })
 function Place_dice () {
     if (Power_up_2 == 0) {
@@ -1206,6 +1286,10 @@ function Place_dice () {
         tiles.placeOnRandomTile(Dice, sprites.castle.tileDarkGrass1)
     }
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.warmRadial, 500)
+    First_dice(randint(1, 4))
+})
 function Second_Dice (X: number) {
     if (1 == X) {
         Power_up_2 = 1
@@ -1222,6 +1306,39 @@ function Second_Dice (X: number) {
     }
     game.splash("press B to activate")
 }
+sprites.onOverlap(SpriteKind.Fire, SpriteKind.Frozen, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.blizzard, 500)
+})
+sprites.onOverlap(SpriteKind.bomb, SpriteKind.Frozen, function (sprite, otherSprite) {
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -1
+    info.changeLifeBy(1)
+})
+statusbars.onZero(StatusBarKind.Energy, function (status) {
+    Weakspot.setKind(SpriteKind.hollow)
+    Weakspot.setImage(img`
+        . . . . f f f f f f f . . . . . 
+        . . f f b b b f b b b f f . . . 
+        . f b b b b b f b b b b b f . . 
+        . f b b b b b f b b b b b f . . 
+        f b b b b b f f f b b b b b f . 
+        f b b b b b f f f b b b b b f . 
+        f b b b b b f f f b b b b b f . 
+        f f f f f f f f f f f f f f f . 
+        f b b b b b f f f b b b b b f . 
+        f b b b b b f f f b b b b b f . 
+        f b b b b b f f f b b b b b f . 
+        . f b b b b b f b b b b b f . . 
+        . f b b b b b f b b b b b f . . 
+        . . f f b b b f b b b f f . . . 
+        . . . . f f f f f f f . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.second, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.spray, 500)
+    game.splash("This number has been erased.")
+    Power_up_2 = 0
+})
 sprites.onOverlap(SpriteKind.Freeze, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.setImage(img`
         . . . . . . 9 9 9 9 9 9 9 . . . 
@@ -1269,42 +1386,6 @@ sprites.onOverlap(SpriteKind.Freeze, SpriteKind.Enemy, function (sprite, otherSp
     true
     )
     otherSprite.setKind(SpriteKind.Enemy)
-})
-sprites.onOverlap(SpriteKind.bomb, SpriteKind.Frozen, function (sprite, otherSprite) {
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -1
-    info.changeLifeBy(1)
-})
-controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    Right_face = false
-    Sigma.setImage(img`
-        . . . . . . . . . . . . . . . . 
-        . f f f f f f f f f f f f f f . 
-        . f 7 a 7 7 a a a a a 2 2 2 f . 
-        . f 7 a a a a 7 7 7 a 2 2 5 f . 
-        . f a 7 f f f f f f f f 2 5 f . 
-        . f 7 7 7 a a 7 7 a f 2 2 5 f . 
-        . f a 1 1 1 9 9 f f 5 2 5 5 f . 
-        . f 7 1 1 9 9 f 9 2 2 5 2 5 f . 
-        . f 7 1 1 9 f 9 9 2 2 5 2 2 f . 
-        . f 7 1 9 9 1 f 9 9 2 2 8 2 f . 
-        . f 7 1 9 1 1 1 f f 1 9 9 8 f . 
-        . f a 1 1 1 9 9 9 1 f 9 8 8 f . 
-        . f a 7 f f f f f f f f b c f . 
-        . f a 7 a a a b c b b b c c f . 
-        . f f f f f f f f f f f f f f . 
-        . . . . . . . . . . . . . . . . 
-        `)
-})
-scene.onOverlapTile(SpriteKind.Projectile, assets.tile`myTile2`, function (sprite, location) {
-    tiles.setTileAt(location, assets.tile`myTile3`)
-})
-sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -10
-    sprite.destroy()
-})
-sprites.onOverlap(SpriteKind.Fire, SpriteKind.Weak, function (sprite, otherSprite) {
-    statusbar2.value += -6
-    scene.cameraShake(4, 500)
 })
 function First_powerup (Y: number) {
     if (Right_face == true) {
@@ -1416,7 +1497,6 @@ function First_powerup (Y: number) {
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 `, Sigma, -100, 0)
-            pause(1500)
         } else if (3 == Y) {
             flame = sprites.create(img`
                 . . . . . . . . . . . . . . . . 
@@ -1488,21 +1568,51 @@ function First_powerup (Y: number) {
         }
     }
 }
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.hazardWater, function (sprite, location) {
-    game.over(false)
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -10
+    sprite.destroy()
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
-    otherSprite.destroy(effects.warmRadial, 500)
-    First_dice(randint(1, 4))
-})
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairWest, function (sprite, location) {
-    Levels(currentlevel)
-    if (fnumber) {
-        fnumber.destroy()
-    }
-    if (snumber) {
-        snumber.destroy()
-    }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    scene.cameraShake(4, 500)
+    Sigma.setImage(img`
+        . . . . . . . . . . . . . . . . 
+        . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+        . 2 2 2 2 f f f f f 2 2 f 2 2 . 
+        . 2 f 2 2 f 2 2 2 f f f f 2 2 . 
+        . 2 f 2 2 2 2 2 2 2 2 2 2 f 2 . 
+        . 2 f 2 2 2 f 2 2 f f 2 2 2 2 . 
+        . 2 f f 2 f 2 2 2 2 f f f f 2 . 
+        . 2 f 2 f 2 2 2 2 2 2 f f 2 2 . 
+        . 2 2 2 f 2 2 2 2 2 2 f f 2 2 . 
+        . 2 2 2 2 2 2 2 2 f 2 2 f 2 2 . 
+        . 2 2 2 2 f 2 2 f f f 2 f 2 2 . 
+        . 2 2 2 2 2 f 2 2 2 f f f f 2 . 
+        . 2 f 2 2 2 2 2 2 2 2 2 2 f 2 . 
+        . 2 f f 2 2 2 f 2 f f f 2 f 2 . 
+        . 2 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+        . . . . . . . . . . . . . . . . 
+        `)
+    info.changeLifeBy(-100)
+    pause(100)
+    Sigma.setImage(img`
+        . . . . . 4 4 4 4 4 4 . . . . . 
+        . . . 4 4 5 5 5 5 5 5 4 4 . . . 
+        . . . 4 5 f 5 5 5 5 f 5 4 . . . 
+        . . 4 5 5 f 5 5 5 5 f 5 5 4 . . 
+        . . 4 5 5 f 5 5 5 5 f 5 5 4 . . 
+        . . 4 5 5 5 5 f f 5 5 5 5 4 . . 
+        . . 4 5 5 5 5 5 5 5 5 5 5 4 . . 
+        . f 4 5 5 5 f f f f f 5 5 4 f . 
+        f . 4 5 5 5 5 f 5 5 5 5 5 4 . f 
+        f . 4 5 5 5 5 f f f 5 5 5 4 . f 
+        . . 4 5 5 5 5 5 f 5 5 5 5 4 . . 
+        . . . 4 5 5 5 f 5 5 5 5 4 . . . 
+        . . . 4 4 5 5 f f f f 4 4 . . . 
+        . . . . . 4 4 4 4 4 4 . . . . . 
+        . . . . . f . . . . f . . . . . 
+        . . . . f f . . . . f f . . . . 
+        `)
+    pause(1000)
 })
 let Dice: Sprite = null
 let Dice2: Sprite = null
@@ -1524,25 +1634,25 @@ let powerup = 0
 let currentlevel = 0
 let Sigma: Sprite = null
 Sigma = sprites.create(img`
-    . . . . . . . . . . . . . . . . 
-    . f f f f f f f f f f f f f f . 
-    . f 2 2 2 a a a a a 7 7 a 7 f . 
-    . f 5 2 2 a 7 7 7 a a a a 7 f . 
-    . f 5 2 f f f f f f f f 7 a f . 
-    . f 5 2 2 f a 7 7 a a 7 7 7 f . 
-    . f 5 5 2 5 f f 9 9 1 1 1 a f . 
-    . f 5 2 5 2 2 9 f 9 9 1 1 7 f . 
-    . f 2 2 5 2 2 9 9 f 9 1 1 7 f . 
-    . f 2 8 2 2 9 9 f 1 9 9 1 7 f . 
-    . f 8 9 9 1 f f 1 1 1 9 1 7 f . 
-    . f 8 8 9 f 1 9 9 9 1 1 1 a f . 
-    . f c b f f f f f f f f 7 a f . 
-    . f c c b b b c b a a a 7 a f . 
-    . f f f f f f f f f f f f f f . 
-    . . . . . . . . . . . . . . . . 
+    . . . . . 4 4 4 4 4 4 . . . . . 
+    . . . 4 4 5 5 5 5 5 5 4 4 . . . 
+    . . . 4 5 f 5 5 5 5 f 5 4 . . . 
+    . . 4 5 5 f 5 5 5 5 f 5 5 4 . . 
+    . . 4 5 5 f 5 5 5 5 f 5 5 4 . . 
+    . . 4 5 5 5 5 f f 5 5 5 5 4 . . 
+    . . 4 5 5 5 5 5 5 5 5 5 5 4 . . 
+    . f 4 5 5 5 f f f f f 5 5 4 f . 
+    f . 4 5 5 5 5 f 5 5 5 5 5 4 . f 
+    f . 4 5 5 5 5 f f f 5 5 5 4 . f 
+    . . 4 5 5 5 5 5 f 5 5 5 5 4 . . 
+    . . . 4 5 5 5 f 5 5 5 5 4 . . . 
+    . . . 4 4 5 5 f f f f 4 4 . . . 
+    . . . . . 4 4 4 4 4 4 . . . . . 
+    . . . . . f . . . . f . . . . . 
+    . . . . f f . . . . f f . . . . 
     `, SpriteKind.Player)
 controller.moveSprite(Sigma, 100, 0)
-currentlevel = 9
+currentlevel = 0
 Levels(currentlevel)
 scene.setBackgroundColor(13)
 scene.cameraFollowSprite(Sigma)
