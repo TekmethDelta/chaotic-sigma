@@ -302,12 +302,6 @@ function Levels (levelnum: number) {
     } else if (levelnum == 6) {
         // mines
         tiles.setTilemap(tilemap`level8`)
-    } else if (levelnum == 7) {
-        // Desert
-        tiles.setTilemap(tilemap`level8`)
-    } else if (levelnum == 8) {
-        // Under water
-        tiles.setTilemap(tilemap`level8`)
     } else {
         tiles.setTilemap(tilemap`level20`)
         Chaser = sprites.create(img`
@@ -1198,24 +1192,7 @@ sprites.onOverlap(SpriteKind.Fire, SpriteKind.Enemy, function (sprite, otherSpri
 })
 function Enemyset () {
     for (let value8 of tiles.getTilesByType(sprites.castle.tilePath5)) {
-        Enemy_up_down = sprites.create(img`
-            . . . . . . 2 2 2 2 . . . . . . 
-            . . . . . . 2 2 2 2 . . . . . . 
-            . . . . . 2 2 2 2 2 2 2 . . . . 
-            . . . . . . 2 2 2 2 2 2 . . . . 
-            . . . . . . . . 2 2 2 2 . . . . 
-            . . . . . . . . . 2 2 2 . . . . 
-            . . . . . 8 8 8 2 2 2 2 . . . . 
-            . . . . 8 8 8 8 2 2 2 2 . . . . 
-            . . . . . 8 8 8 2 . . . . . . . 
-            . . . . . . . 8 8 . . . . . . . 
-            . . . . . 2 2 2 8 . . . . . . . 
-            . . . . 2 2 2 2 8 8 8 . . . . . 
-            . . . . . 2 2 2 8 8 8 8 8 . . . 
-            . . . . . . . . 8 8 8 8 8 . . . 
-            . . . . . . 8 8 8 8 8 8 8 . . . 
-            . . . . . . 8 8 8 8 8 8 . . . . 
-            `, SpriteKind.Enemy)
+        Enemy_up_down = sprites.create(assets.image`Eyet Boll`, SpriteKind.Enemy)
         tiles.placeOnTile(Enemy_up_down, value8)
         animation.runMovementAnimation(
         Enemy_up_down,
@@ -1537,24 +1514,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
 })
 function Chacha_slide () {
     for (let value2 of tiles.getTilesByType(sprites.castle.tilePath8)) {
-        Enemy_side = sprites.create(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . 2 . . . 8 . . . . . . . 
-            . . . 2 2 2 . 8 8 8 . . . 2 . . 
-            8 8 . 2 2 2 . 8 8 8 . . 2 2 2 2 
-            8 8 . 2 2 2 8 8 8 8 . . 2 2 2 2 
-            8 8 8 8 8 8 8 2 2 2 . 2 2 2 2 2 
-            8 8 8 8 8 . . . 2 2 2 2 2 2 2 2 
-            8 8 8 8 8 . . . 2 2 2 2 2 2 . . 
-            8 8 8 8 . . . . 2 2 2 2 2 2 . . 
-            . 8 8 8 . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, SpriteKind.enemy2)
+        Enemy_side = sprites.create(assets.image`Fanshy`, SpriteKind.enemy2)
         tiles.placeOnTile(Enemy_side, value2)
         animation.runMovementAnimation(
         Enemy_side,
