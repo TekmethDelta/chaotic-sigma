@@ -308,26 +308,12 @@ function Levels (levelnum: number) {
     } else if (levelnum == 8) {
         // Under water
         tiles.setTilemap(tilemap`level8`)
+        Level_Start()
+        tiles.replaceAllTiles(sprites.dungeon.darkGroundNorthEast1, assets.tile`transparency16`)
+        tiles.replaceAllTiles(sprites.castle.tilePath5, assets.tile`transparency16`)
     } else {
         tiles.setTilemap(tilemap`level20`)
-        Chaser = sprites.create(img`
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            c c c c c c c c c c c c c c c c 
-            `, SpriteKind.Unkillable)
+        Chaser = sprites.create(assets.image`VillainSuit`, SpriteKind.Unkillable)
         Chaser.follow(Sigma, 50)
         Chaser.setFlag(SpriteFlag.GhostThroughWalls, true)
         Weakspot = sprites.create(img`
@@ -358,6 +344,28 @@ function Levels (levelnum: number) {
         tiles.replaceAllTiles(sprites.castle.tileDarkGrass1, assets.tile`transparency16`)
         tiles.replaceAllTiles(sprites.castle.tileGrass1, assets.tile`transparency16`)
     }
+}
+function First_dice (X: number) {
+    if (1 == X) {
+        powerup = 1
+        game.splash("#1")
+    } else if (2 == X) {
+        powerup = 2
+        game.splash("#2")
+    } else if (3 == X) {
+        powerup = 3
+        game.splash("#3")
+    } else if (4 == X) {
+        powerup = 4
+        game.splash("#4")
+    }
+    game.splash("press A to activate")
+}
+function Level_Start () {
+    Enemyset()
+    Place_dice()
+    Chacha_slide()
+    tiles.placeOnRandomTile(Sigma, sprites.dungeon.darkGroundNorthEast1)
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Sigma.vy == 0) {
@@ -393,6 +401,198 @@ function choose () {
     tiles.placeOnRandomTile(Sigma, sprites.dungeon.collectibleInsignia)
     game.splash("You may choose to delete a number")
 }
+function Place_dice () {
+    if (Power_up_2 == 0) {
+        Dice2 = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 f 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 f 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 f 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, SpriteKind.dooF)
+        animation.runImageAnimation(
+        Dice2,
+        [img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 1 f 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 1 f 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 f 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 f 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 f 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 f f 1 1 1 f . . . 
+            . . . f 1 1 1 f f 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `],
+        100,
+        true
+        )
+        tiles.placeOnRandomTile(Dice2, sprites.castle.tileGrass1)
+    }
+    if (powerup == 0) {
+        Dice = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 f 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 f 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 f 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, SpriteKind.Food)
+        animation.runImageAnimation(
+        Dice,
+        [img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 1 f 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 1 f 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 f 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 f 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 f 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 f 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 f f 1 1 1 f . . . 
+            . . . f 1 1 1 f f 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f 1 1 1 1 1 1 1 1 f . . . 
+            . . . f f f f f f f f f f . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `],
+        100,
+        true
+        )
+        tiles.placeOnRandomTile(Dice, sprites.castle.tileDarkGrass1)
+    }
+}
 sprites.onOverlap(SpriteKind.Freeze, SpriteKind.enemy2, function (sprite, otherSprite) {
     otherSprite.setImage(img`
         . . . . . . 9 9 9 9 9 9 9 . . . 
@@ -415,24 +615,7 @@ sprites.onOverlap(SpriteKind.Freeze, SpriteKind.enemy2, function (sprite, otherS
     animation.stopAnimation(animation.AnimationTypes.All, otherSprite)
     otherSprite.setKind(SpriteKind.Frozen)
     pause(5000)
-    otherSprite.setImage(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . 2 . . . 8 . . . . . . . 
-        . . . 2 2 2 . 8 8 8 . . . 2 . . 
-        8 8 . 2 2 2 . 8 8 8 . . 2 2 2 2 
-        8 8 . 2 2 2 8 8 8 8 . . 2 2 2 2 
-        8 8 8 8 8 8 8 2 2 2 . 2 2 2 2 2 
-        8 8 8 8 8 . . . 2 2 2 2 2 2 2 2 
-        8 8 8 8 8 . . . 2 2 2 2 2 2 . . 
-        8 8 8 8 . . . . 2 2 2 2 2 2 . . 
-        . 8 8 8 . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `)
+    otherSprite.setImage(assets.image`Fanshy`)
     animation.runMovementAnimation(
     otherSprite,
     animation.animationPresets(animation.bobbing),
@@ -441,227 +624,9 @@ sprites.onOverlap(SpriteKind.Freeze, SpriteKind.enemy2, function (sprite, otherS
     )
     otherSprite.setKind(SpriteKind.enemy2)
 })
-function Chacha_slide () {
-    for (let value of tiles.getTilesByType(sprites.castle.tilePath8)) {
-        Enemy_side = sprites.create(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . 2 . . . 8 . . . . . . . 
-            . . . 2 2 2 . 8 8 8 . . . 2 . . 
-            8 8 . 2 2 2 . 8 8 8 . . 2 2 2 2 
-            8 8 . 2 2 2 8 8 8 8 . . 2 2 2 2 
-            8 8 8 8 8 8 8 2 2 2 . 2 2 2 2 2 
-            8 8 8 8 8 . . . 2 2 2 2 2 2 2 2 
-            8 8 8 8 8 . . . 2 2 2 2 2 2 . . 
-            8 8 8 8 . . . . 2 2 2 2 2 2 . . 
-            . 8 8 8 . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, SpriteKind.enemy2)
-        tiles.placeOnTile(Enemy_side, value)
-        animation.runMovementAnimation(
-        Enemy_side,
-        animation.animationPresets(animation.bobbingRight),
-        2000,
-        true
-        )
-        animation.runMovementAnimation(
-        Enemy_side,
-        animation.animationPresets(animation.bobbingLeft),
-        2000,
-        true
-        )
-        statusbar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
-        statusbar.attachToSprite(Enemy_side)
-    }
-}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     First_powerup(powerup)
 })
-function Second_poweup (Y: number) {
-    if (Right_face == true) {
-        if (4 == Y) {
-            projectile = sprites.createProjectileFromSprite(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . f f f f f . . . . . . 
-                . . . . f c b b c c f . . . . . 
-                . . . . f b c b c c f . . . . . 
-                . . . . f c c b c c f . . . . . 
-                . . . . f c b b b c f . . . . . 
-                . . . . f c c c c c f . . . . . 
-                . . . . . f f f f f . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                `, Sigma, 100, 0)
-        } else if (3 == Y) {
-            flame = sprites.create(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                2 2 2 2 . . . 2 2 . . . . . . . 
-                4 4 4 2 2 2 2 2 2 2 . . . . . . 
-                4 4 4 4 4 4 4 4 4 2 2 . . . . . 
-                4 5 5 5 4 4 4 4 4 4 4 2 2 2 2 2 
-                5 5 5 5 5 5 5 5 5 5 5 4 4 4 4 2 
-                5 5 5 5 5 5 5 5 4 4 5 5 4 4 2 . 
-                5 5 5 5 5 4 4 4 2 2 4 4 4 2 2 . 
-                4 4 4 5 5 5 4 4 2 2 2 2 2 2 2 . 
-                4 4 4 4 4 4 4 2 . . . . . . . . 
-                2 2 2 4 2 2 2 2 . . . . . . . . 
-                . . 2 2 2 . 2 2 . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                `, SpriteKind.Fire)
-            flame.setPosition(Sigma.x + 14, Sigma.y)
-            controller.moveSprite(flame, 100, 100)
-            flame.lifespan = 5000
-            pause(5000)
-        } else if (2 == Y) {
-            Ice = sprites.create(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . 9 9 9 . . . . . . . 
-                . . . . . . 9 9 9 . 9 9 . . . . 
-                . . . . . 9 1 1 9 9 9 9 9 9 . . 
-                . . . . . 9 1 1 9 1 1 1 1 9 9 . 
-                . . . 9 9 9 9 1 9 9 1 1 1 9 9 . 
-                9 . . 9 1 1 9 9 1 9 1 1 1 9 . . 
-                9 9 9 1 9 9 1 1 1 9 9 1 1 9 9 . 
-                9 1 1 1 1 9 9 9 1 1 1 9 1 1 9 . 
-                9 9 9 9 1 1 1 9 9 9 1 9 9 9 9 . 
-                . . . 9 9 9 9 1 1 1 1 9 9 9 . . 
-                . . . . . . 9 1 1 1 9 9 9 . . . 
-                . . . . . . . 9 9 9 9 9 9 . . . 
-                . . . . . . . . . 9 9 . . . . . 
-                `, SpriteKind.Freeze)
-            Ice.setPosition(Sigma.x, Sigma.y)
-            Ice.setVelocity(50, 0)
-            Ice.lifespan = 3000
-            pause(1500)
-        } else if (1 == Y) {
-            Leech = sprites.create(img`
-                . . . . . . . 7 7 7 7 7 7 . . . 
-                . . . . . . 7 7 . . . . 7 7 . . 
-                7 7 . . a a a a a a a . . 7 7 . 
-                7 . . a 7 7 7 7 7 7 7 a . . . . 
-                7 7 a 7 7 7 a a a a 7 7 a . 7 7 
-                7 7 a 7 a 7 7 a 7 7 a 7 a . 7 . 
-                7 . a 7 7 a 7 7 7 7 a 7 a . 7 . 
-                7 7 a 7 a 7 7 7 7 7 7 7 a 7 7 . 
-                . 7 a 7 a 7 a a 7 7 7 7 a . 7 . 
-                . . a 7 a 7 7 7 7 7 a 7 a . 7 . 
-                . . a 7 7 7 7 a a a 7 7 a . 7 7 
-                . . . a 7 7 7 7 7 7 7 a . . . 7 
-                . . . . a a a a a a a . . . 7 7 
-                . . . . . . . 7 . . . . . 7 7 . 
-                . . 7 . . . 7 7 . . . . . . 7 . 
-                . . 7 7 7 7 7 . . . . . . . . . 
-                `, SpriteKind.bomb)
-            Leech.setPosition(Sigma.x, Sigma.y)
-            Leech.lifespan = 5000
-            pause(1500)
-        }
-    } else if (Right_face == false) {
-        if (4 == Y) {
-            projectile = sprites.createProjectileFromSprite(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . f f f f f . . . . . . 
-                . . . . f c b b c c f . . . . . 
-                . . . . f b c b c c f . . . . . 
-                . . . . f c c b c c f . . . . . 
-                . . . . f c b b b c f . . . . . 
-                . . . . f c c c c c f . . . . . 
-                . . . . . f f f f f . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                `, Sigma, -100, 0)
-        } else if (3 == Y) {
-            flame = sprites.create(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . 2 2 . . . 2 2 2 2 
-                . . . . . . 2 2 2 2 2 2 2 4 4 4 
-                . . . . . 2 2 4 4 4 4 4 4 4 4 4 
-                2 2 2 2 2 4 4 4 4 4 4 4 5 5 5 4 
-                2 4 4 4 4 5 5 5 5 5 5 5 5 5 5 5 
-                . 2 4 4 5 5 4 4 5 5 5 5 5 5 5 5 
-                . 2 2 4 4 4 2 2 4 4 4 5 5 5 5 5 
-                . 2 2 2 2 2 2 2 4 4 5 5 5 4 4 4 
-                . . . . . . . . 2 4 4 4 4 4 4 4 
-                . . . . . . . . 2 2 2 2 4 2 2 2 
-                . . . . . . . . 2 2 . 2 2 2 . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                `, SpriteKind.Fire)
-            flame.setPosition(Sigma.x + -14, Sigma.y)
-            controller.moveSprite(flame)
-            flame.lifespan = 5000
-            pause(5000)
-        } else if (2 == Y) {
-            Ice = sprites.create(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . 9 9 9 . . . . . . 
-                . . . . 9 9 . 9 9 9 . . . . . . 
-                . . 9 9 9 9 9 9 1 1 9 . . . . . 
-                . 9 9 1 1 1 1 9 1 1 9 . . . . . 
-                . 9 9 1 1 1 9 9 1 9 9 9 9 . . . 
-                . . 9 1 1 1 9 1 9 9 1 1 9 . . 9 
-                . 9 9 1 1 9 9 1 1 1 9 9 1 9 9 9 
-                . 9 1 1 9 1 1 1 9 9 9 1 1 1 1 9 
-                . 9 9 9 9 1 9 9 9 1 1 1 9 9 9 9 
-                . . 9 9 9 1 1 1 1 9 9 9 9 . . . 
-                . . . 9 9 9 1 1 1 9 . . . . . . 
-                . . . 9 9 9 9 9 9 . . . . . . . 
-                . . . . . 9 9 . . . . . . . . . 
-                `, SpriteKind.Freeze)
-            Ice.setPosition(Sigma.x, Sigma.y)
-            Ice.setVelocity(-50, 0)
-            Ice.lifespan = 3000
-            pause(1500)
-        } else if (1 == Y) {
-            Leech = sprites.create(img`
-                . . . . . . . 7 7 7 7 7 7 . . . 
-                . . . . . . 7 7 . . . . 7 7 . . 
-                7 7 . . a a a a a a a . . 7 7 . 
-                7 . . a 7 7 7 7 7 7 7 a . . . . 
-                7 7 a 7 7 7 a a a a 7 7 a . 7 7 
-                7 7 a 7 a 7 7 a 7 7 a 7 a . 7 . 
-                7 . a 7 7 a 7 7 7 7 a 7 a . 7 . 
-                7 7 a 7 a 7 7 7 7 7 7 7 a 7 7 . 
-                . 7 a 7 a 7 a a 7 7 7 7 a . 7 . 
-                . . a 7 a 7 7 7 7 7 a 7 a . 7 . 
-                . . a 7 7 7 7 a a a 7 7 a . 7 7 
-                . . . a 7 7 7 7 7 7 7 a . . . 7 
-                . . . . a a a a a a a . . . 7 7 
-                . . . . . . . 7 . . . . . 7 7 . 
-                . . 7 . . . 7 7 . . . . . . 7 . 
-                . . 7 7 7 7 7 . . . . . . . . . 
-                `, SpriteKind.bomb)
-            Leech.setPosition(Sigma.x, Sigma.y)
-            Leech.lifespan = 5000
-            pause(1500)
-        }
-    }
-}
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile4`, function (sprite, location) {
     currentlevel += 3
     choose()
@@ -773,6 +738,169 @@ sprites.onOverlap(SpriteKind.Freeze, SpriteKind.Weak, function (sprite, otherSpr
 scene.onOverlapTile(SpriteKind.Freeze, assets.tile`myTile0`, function (sprite, location) {
     tiles.setTileAt(location, assets.tile`myTile5`)
 })
+function Second_Dice (X: number) {
+    if (1 == X) {
+        Power_up_2 = 1
+        game.splash("#1")
+    } else if (2 == X) {
+        Power_up_2 = 2
+        game.splash("#2")
+    } else if (3 == X) {
+        Power_up_2 = 3
+        game.splash("#3")
+    } else if (4 == X) {
+        Power_up_2 = 4
+        game.splash("#4")
+    }
+    game.splash("press B to activate")
+}
+function First_powerup (Y: number) {
+    if (Right_face == true) {
+        if (4 == Y) {
+            projectile = sprites.createProjectileFromSprite(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . f f f f f . . . . . . 
+                . . . . f c b b c c f . . . . . 
+                . . . . f b c b c c f . . . . . 
+                . . . . f c c b c c f . . . . . 
+                . . . . f c b b b c f . . . . . 
+                . . . . f c c c c c f . . . . . 
+                . . . . . f f f f f . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, Sigma, 100, 0)
+        } else if (3 == Y) {
+            flame = sprites.create(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                2 2 2 2 . . . 2 2 . . . . . . . 
+                4 4 4 2 2 2 2 2 2 2 . . . . . . 
+                4 4 4 4 4 4 4 4 4 2 2 . . . . . 
+                4 5 5 5 4 4 4 4 4 4 4 2 2 2 2 2 
+                5 5 5 5 5 5 5 5 5 5 5 4 4 4 4 2 
+                5 5 5 5 5 5 5 5 4 4 5 5 4 4 2 . 
+                5 5 5 5 5 4 4 4 2 2 4 4 4 2 2 . 
+                4 4 4 5 5 5 4 4 2 2 2 2 2 2 2 . 
+                4 4 4 4 4 4 4 2 . . . . . . . . 
+                2 2 2 4 2 2 2 2 . . . . . . . . 
+                . . 2 2 2 . 2 2 . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, SpriteKind.Fire)
+            flame.setPosition(Sigma.x + 14, Sigma.y)
+            controller.moveSprite(flame, 100, 100)
+            flame.lifespan = 5000
+            pause(5000)
+        } else if (2 == Y) {
+            Ice = sprites.create(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . 9 9 9 . . . . . . . 
+                . . . . . . 9 9 9 . 9 9 . . . . 
+                . . . . . 9 1 1 9 9 9 9 9 9 . . 
+                . . . . . 9 1 1 9 1 1 1 1 9 9 . 
+                . . . 9 9 9 9 1 9 9 1 1 1 9 9 . 
+                9 . . 9 1 1 9 9 1 9 1 1 1 9 . . 
+                9 9 9 1 9 9 1 1 1 9 9 1 1 9 9 . 
+                9 1 1 1 1 9 9 9 1 1 1 9 1 1 9 . 
+                9 9 9 9 1 1 1 9 9 9 1 9 9 9 9 . 
+                . . . 9 9 9 9 1 1 1 1 9 9 9 . . 
+                . . . . . . 9 1 1 1 9 9 9 . . . 
+                . . . . . . . 9 9 9 9 9 9 . . . 
+                . . . . . . . . . 9 9 . . . . . 
+                `, SpriteKind.Freeze)
+            Ice.setPosition(Sigma.x, Sigma.y)
+            Ice.setVelocity(50, 0)
+            Ice.lifespan = 3000
+            pause(1500)
+        } else if (1 == Y) {
+            Leech = sprites.create(assets.image`electricbogalo`, SpriteKind.bomb)
+            Leech.setPosition(Sigma.x, Sigma.y)
+            Leech.lifespan = 5000
+            pause(1500)
+        }
+    } else if (Right_face == false) {
+        if (4 == Y) {
+            projectile = sprites.createProjectileFromSprite(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . f f f f f . . . . . . 
+                . . . . f c b b c c f . . . . . 
+                . . . . f b c b c c f . . . . . 
+                . . . . f c c b c c f . . . . . 
+                . . . . f c b b b c f . . . . . 
+                . . . . f c c c c c f . . . . . 
+                . . . . . f f f f f . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, Sigma, -100, 0)
+        } else if (3 == Y) {
+            flame = sprites.create(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . 2 2 . . . 2 2 2 2 
+                . . . . . . 2 2 2 2 2 2 2 4 4 4 
+                . . . . . 2 2 4 4 4 4 4 4 4 4 4 
+                2 2 2 2 2 4 4 4 4 4 4 4 5 5 5 4 
+                2 4 4 4 4 5 5 5 5 5 5 5 5 5 5 5 
+                . 2 4 4 5 5 4 4 5 5 5 5 5 5 5 5 
+                . 2 2 4 4 4 2 2 4 4 4 5 5 5 5 5 
+                . 2 2 2 2 2 2 2 4 4 5 5 5 4 4 4 
+                . . . . . . . . 2 4 4 4 4 4 4 4 
+                . . . . . . . . 2 2 2 2 4 2 2 2 
+                . . . . . . . . 2 2 . 2 2 2 . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, SpriteKind.Fire)
+            flame.setPosition(Sigma.x + -14, Sigma.y)
+            controller.moveSprite(flame)
+            flame.lifespan = 5000
+            pause(5000)
+        } else if (2 == Y) {
+            Ice = sprites.create(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . 9 9 9 . . . . . . 
+                . . . . 9 9 . 9 9 9 . . . . . . 
+                . . 9 9 9 9 9 9 1 1 9 . . . . . 
+                . 9 9 1 1 1 1 9 1 1 9 . . . . . 
+                . 9 9 1 1 1 9 9 1 9 9 9 9 . . . 
+                . . 9 1 1 1 9 1 9 9 1 1 9 . . 9 
+                . 9 9 1 1 9 9 1 1 1 9 9 1 9 9 9 
+                . 9 1 1 9 1 1 1 9 9 9 1 1 1 1 9 
+                . 9 9 9 9 1 9 9 9 1 1 1 9 9 9 9 
+                . . 9 9 9 1 1 1 1 9 9 9 9 . . . 
+                . . . 9 9 9 1 1 1 9 . . . . . . 
+                . . . 9 9 9 9 9 9 . . . . . . . 
+                . . . . . 9 9 . . . . . . . . . 
+                `, SpriteKind.Freeze)
+            Ice.setPosition(Sigma.x, Sigma.y)
+            Ice.setVelocity(-50, 0)
+            Ice.lifespan = 3000
+            pause(1500)
+        } else if (1 == Y) {
+            Leech = sprites.create(assets.image`electricbogalo`, SpriteKind.bomb)
+            Leech.setPosition(Sigma.x, Sigma.y)
+            Leech.lifespan = 5000
+            pause(1500)
+        }
+    }
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.dooF, function (sprite, otherSprite) {
     otherSprite.destroy(effects.warmRadial, 500)
     Second_Dice(randint(1, 4))
@@ -786,20 +914,20 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Weak, function (sprite, othe
     sprite.destroy()
 })
 function Number1 () {
-    for (let value of sprites.allOfKind(SpriteKind.Frozen)) {
-        value.destroy()
+    for (let value3 of sprites.allOfKind(SpriteKind.Frozen)) {
+        value3.destroy()
     }
-    for (let value of sprites.allOfKind(SpriteKind.enemy2)) {
-        value.destroy()
+    for (let value4 of sprites.allOfKind(SpriteKind.enemy2)) {
+        value4.destroy()
     }
-    for (let value of sprites.allOfKind(SpriteKind.Enemy)) {
-        value.destroy()
+    for (let value5 of sprites.allOfKind(SpriteKind.Enemy)) {
+        value5.destroy()
     }
-    for (let value of sprites.allOfKind(SpriteKind.dooF)) {
-        value.destroy()
+    for (let value6 of sprites.allOfKind(SpriteKind.dooF)) {
+        value6.destroy()
     }
-    for (let value of sprites.allOfKind(SpriteKind.Food)) {
-        value.destroy()
+    for (let value7 of sprites.allOfKind(SpriteKind.Food)) {
+        value7.destroy()
     }
     fnumber = sprites.create(img`
         . . . . . . . . . . . . . . . . 
@@ -1003,33 +1131,27 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onOverlap(SpriteKind.Fire, SpriteKind.Enemy, function (sprite, otherSprite) {
     statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -2
 })
-function Level_Start () {
-    Enemyset()
-    Place_dice()
-    Chacha_slide()
-    tiles.placeOnRandomTile(Sigma, sprites.dungeon.darkGroundNorthEast1)
-}
 function Enemyset () {
-    for (let value of tiles.getTilesByType(sprites.castle.tilePath5)) {
+    for (let value8 of tiles.getTilesByType(sprites.castle.tilePath5)) {
         Enemy_up_down = sprites.create(img`
-            . . . . . . 2 2 2 2 . . . . . . 
-            . . . . . . 2 2 2 2 . . . . . . 
-            . . . . . 2 2 2 2 2 2 2 . . . . 
-            . . . . . . 2 2 2 2 2 2 . . . . 
-            . . . . . . . . 2 2 2 2 . . . . 
-            . . . . . . . . . 2 2 2 . . . . 
-            . . . . . 8 8 8 2 2 2 2 . . . . 
-            . . . . 8 8 8 8 2 2 2 2 . . . . 
-            . . . . . 8 8 8 2 . . . . . . . 
-            . . . . . . . 8 8 . . . . . . . 
-            . . . . . 2 2 2 8 . . . . . . . 
-            . . . . 2 2 2 2 8 8 8 . . . . . 
-            . . . . . 2 2 2 8 8 8 8 8 . . . 
-            . . . . . . . . 8 8 8 8 8 . . . 
-            . . . . . . 8 8 8 8 8 8 8 . . . 
-            . . . . . . 8 8 8 8 8 8 . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . f f f f f f f . . . . . 
+            . . . f 1 1 1 1 1 1 1 f . . . . 
+            . . f 1 1 f f f f f 1 1 f . . . 
+            . f f 1 1 f f 1 f f 1 1 f f . . 
+            . f f 1 1 1 1 f 1 1 1 1 f f . . 
+            . f f 1 1 1 1 f 1 1 1 1 f f . . 
+            . f f 1 1 f f 1 f f 1 1 f f . . 
+            . f f 1 1 f f f f f 1 1 f f . . 
+            . f f 1 1 1 1 1 1 1 1 1 f f . . 
+            . f f f 1 1 1 1 1 1 1 f f f . . 
+            . . f f f f f f f f f f f . . . 
+            . . . f f f f f f f f f . . . . 
+            . . . . f f f f f f f . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
             `, SpriteKind.Enemy)
-        tiles.placeOnTile(Enemy_up_down, value)
+        tiles.placeOnTile(Enemy_up_down, value8)
         animation.runMovementAnimation(
         Enemy_up_down,
         animation.animationPresets(animation.bobbing),
@@ -1047,22 +1169,6 @@ sprites.onOverlap(SpriteKind.bomb, SpriteKind.Enemy, function (sprite, otherSpri
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.hazardWater, function (sprite, location) {
     game.over(false)
 })
-function First_dice (X: number) {
-    if (1 == X) {
-        powerup = 1
-        game.splash("#1")
-    } else if (2 == X) {
-        powerup = 2
-        game.splash("#2")
-    } else if (3 == X) {
-        powerup = 3
-        game.splash("#3")
-    } else if (4 == X) {
-        powerup = 4
-        game.splash("#4")
-    }
-    game.splash("press A to activate")
-}
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Frozen, function (sprite, otherSprite) {
     statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -20
     sprite.destroy()
@@ -1077,317 +1183,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.enemy2, function (sprite, ot
     statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -10
     sprite.destroy()
 })
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile5`, function (sprite, location) {
-    currentlevel += 2
-    choose()
-})
-sprites.onOverlap(SpriteKind.Fire, SpriteKind.Weak, function (sprite, otherSprite) {
-    statusbar2.value += -6
-    scene.cameraShake(4, 500)
-})
-info.onLifeZero(function () {
-    game.over(false)
-})
-scene.onOverlapTile(SpriteKind.Fire, assets.tile`myTile`, function (sprite, location) {
-    tiles.setTileAt(location, assets.tile`myTile4`)
-})
-sprites.onOverlap(SpriteKind.Fire, SpriteKind.enemy2, function (sprite, otherSprite) {
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -2
-})
-function Place_dice () {
-    if (Power_up_2 == 0) {
-        Dice2 = sprites.create(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 f 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 f 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 f 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, SpriteKind.dooF)
-        animation.runImageAnimation(
-        Dice2,
-        [img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 1 f 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 1 f 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 f 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 f 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 f 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 f f 1 1 1 f . . . 
-            . . . f 1 1 1 f f 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `],
-        100,
-        true
-        )
-        tiles.placeOnRandomTile(Dice2, sprites.castle.tileGrass1)
-    }
-    if (powerup == 0) {
-        Dice = sprites.create(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 f 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 f 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 f 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, SpriteKind.Food)
-        animation.runImageAnimation(
-        Dice,
-        [img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 1 f 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 1 f 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 f 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 f 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 f 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 f 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 f f 1 1 1 f . . . 
-            . . . f 1 1 1 f f 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f 1 1 1 1 1 1 1 1 f . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `],
-        100,
-        true
-        )
-        tiles.placeOnRandomTile(Dice, sprites.castle.tileDarkGrass1)
-    }
-}
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
-    otherSprite.destroy(effects.warmRadial, 500)
-    First_dice(randint(1, 4))
-})
-function Second_Dice (X: number) {
-    if (1 == X) {
-        Power_up_2 = 1
-        game.splash("#1")
-    } else if (2 == X) {
-        Power_up_2 = 2
-        game.splash("#2")
-    } else if (3 == X) {
-        Power_up_2 = 3
-        game.splash("#3")
-    } else if (4 == X) {
-        Power_up_2 = 4
-        game.splash("#4")
-    }
-    game.splash("press B to activate")
-}
-sprites.onOverlap(SpriteKind.Fire, SpriteKind.Frozen, function (sprite, otherSprite) {
-    otherSprite.destroy(effects.blizzard, 500)
-})
-sprites.onOverlap(SpriteKind.bomb, SpriteKind.Frozen, function (sprite, otherSprite) {
-    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -1
-    info.changeLifeBy(1)
-})
-statusbars.onZero(StatusBarKind.Energy, function (status) {
-    Weakspot.setKind(SpriteKind.hollow)
-    Weakspot.setImage(img`
-        . . . . f f f f f f f . . . . . 
-        . . f f b b b f b b b f f . . . 
-        . f b b b b b f b b b b b f . . 
-        . f b b b b b f b b b b b f . . 
-        f b b b b b f f f b b b b b f . 
-        f b b b b b f f f b b b b b f . 
-        f b b b b b f f f b b b b b f . 
-        f f f f f f f f f f f f f f f . 
-        f b b b b b f f f b b b b b f . 
-        f b b b b b f f f b b b b b f . 
-        f b b b b b f f f b b b b b f . 
-        . f b b b b b f b b b b b f . . 
-        . f b b b b b f b b b b b f . . 
-        . . f f b b b f b b b f f . . . 
-        . . . . f f f f f f f . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `)
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.second, function (sprite, otherSprite) {
-    otherSprite.destroy(effects.spray, 500)
-    game.splash("This number has been erased.")
-    Power_up_2 = 0
-})
-sprites.onOverlap(SpriteKind.Freeze, SpriteKind.Enemy, function (sprite, otherSprite) {
-    otherSprite.setImage(img`
-        . . . . . . 9 9 9 9 9 9 9 . . . 
-        . . . . . 9 9 9 9 1 9 9 9 . . . 
-        . . . 9 9 1 1 1 9 9 9 9 9 . . . 
-        . . . 9 1 1 1 1 9 1 1 9 9 . . . 
-        . . . 9 1 1 1 9 1 1 1 9 9 . . . 
-        . . . 9 9 1 1 9 1 1 1 9 . . . . 
-        . . . 9 9 9 9 9 9 9 9 1 9 9 . . 
-        . 9 9 9 9 9 9 9 1 9 1 1 9 9 . . 
-        . 9 1 9 9 9 9 9 9 1 9 1 1 1 9 . 
-        9 1 1 1 1 1 1 9 1 1 9 1 1 1 9 . 
-        . 9 1 1 1 1 9 9 1 1 9 1 1 9 9 . 
-        . 9 9 1 1 1 1 9 1 1 1 9 1 9 . . 
-        . . . 9 9 9 1 9 1 1 1 9 1 9 . . 
-        . . . . . . 9 9 9 9 9 9 1 9 . . 
-        . . . . . . . . . 9 9 9 9 9 . . 
-        . . . . . . . . . . . . . . . . 
-        `)
-    animation.stopAnimation(animation.AnimationTypes.All, otherSprite)
-    otherSprite.setKind(SpriteKind.Frozen)
-    pause(5000)
-    otherSprite.setImage(img`
-        . . . . . . 2 2 2 2 . . . . . . 
-        . . . . . . 2 2 2 2 . . . . . . 
-        . . . . . 2 2 2 2 2 2 2 . . . . 
-        . . . . . . 2 2 2 2 2 2 . . . . 
-        . . . . . . . . 2 2 2 2 . . . . 
-        . . . . . . . . . 2 2 2 . . . . 
-        . . . . . 8 8 8 2 2 2 2 . . . . 
-        . . . . 8 8 8 8 2 2 2 2 . . . . 
-        . . . . . 8 8 8 2 . . . . . . . 
-        . . . . . . . 8 8 . . . . . . . 
-        . . . . . 2 2 2 8 . . . . . . . 
-        . . . . 2 2 2 2 8 8 8 . . . . . 
-        . . . . . 2 2 2 8 8 8 8 8 . . . 
-        . . . . . . . . 8 8 8 8 8 . . . 
-        . . . . . . 8 8 8 8 8 8 8 . . . 
-        . . . . . . 8 8 8 8 8 8 . . . . 
-        `)
-    animation.runMovementAnimation(
-    otherSprite,
-    animation.animationPresets(animation.bobbing),
-    2000,
-    true
-    )
-    otherSprite.setKind(SpriteKind.Enemy)
-})
-function First_powerup (Y: number) {
+function Second_poweup (Y: number) {
     if (Right_face == true) {
         if (4 == Y) {
             projectile = sprites.createProjectileFromSprite(img`
@@ -1455,24 +1251,7 @@ function First_powerup (Y: number) {
             Ice.lifespan = 3000
             pause(1500)
         } else if (1 == Y) {
-            Leech = sprites.create(img`
-                . . . . . . . 7 7 7 7 7 7 . . . 
-                . . . . . . 7 7 . . . . 7 7 . . 
-                7 7 . . a a a a a a a . . 7 7 . 
-                7 . . a 7 7 7 7 7 7 7 a . . . . 
-                7 7 a 7 7 7 a a a a 7 7 a . 7 7 
-                7 7 a 7 a 7 7 a 7 7 a 7 a . 7 . 
-                7 . a 7 7 a 7 7 7 7 a 7 a . 7 . 
-                7 7 a 7 a 7 7 7 7 7 7 7 a 7 7 . 
-                . 7 a 7 a 7 a a 7 7 7 7 a . 7 . 
-                . . a 7 a 7 7 7 7 7 a 7 a . 7 . 
-                . . a 7 7 7 7 a a a 7 7 a . 7 7 
-                . . . a 7 7 7 7 7 7 7 a . . . 7 
-                . . . . a a a a a a a . . . 7 7 
-                . . . . . . . 7 . . . . . 7 7 . 
-                . . 7 . . . 7 7 . . . . . . 7 . 
-                . . 7 7 7 7 7 . . . . . . . . . 
-                `, SpriteKind.bomb)
+            Leech = sprites.create(assets.image`electricbogalo`, SpriteKind.bomb)
             Leech.setPosition(Sigma.x, Sigma.y)
             Leech.lifespan = 5000
             pause(1500)
@@ -1544,34 +1323,122 @@ function First_powerup (Y: number) {
             Ice.lifespan = 3000
             pause(1500)
         } else if (1 == Y) {
-            Leech = sprites.create(img`
-                . . . . . . . 7 7 7 7 7 7 . . . 
-                . . . . . . 7 7 . . . . 7 7 . . 
-                7 7 . . a a a a a a a . . 7 7 . 
-                7 . . a 7 7 7 7 7 7 7 a . . . . 
-                7 7 a 7 7 7 a a a a 7 7 a . 7 7 
-                7 7 a 7 a 7 7 a 7 7 a 7 a . 7 . 
-                7 . a 7 7 a 7 7 7 7 a 7 a . 7 . 
-                7 7 a 7 a 7 7 7 7 7 7 7 a 7 7 . 
-                . 7 a 7 a 7 a a 7 7 7 7 a . 7 . 
-                . . a 7 a 7 7 7 7 7 a 7 a . 7 . 
-                . . a 7 7 7 7 a a a 7 7 a . 7 7 
-                . . . a 7 7 7 7 7 7 7 a . . . 7 
-                . . . . a a a a a a a . . . 7 7 
-                . . . . . . . 7 . . . . . 7 7 . 
-                . . 7 . . . 7 7 . . . . . . 7 . 
-                . . 7 7 7 7 7 . . . . . . . . . 
-                `, SpriteKind.bomb)
+            Leech = sprites.create(assets.image`electricbogalo`, SpriteKind.bomb)
             Leech.setPosition(Sigma.x, Sigma.y)
             Leech.lifespan = 5000
             pause(1500)
         }
     }
 }
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile5`, function (sprite, location) {
+    currentlevel += 2
+    choose()
+})
+sprites.onOverlap(SpriteKind.Fire, SpriteKind.Weak, function (sprite, otherSprite) {
+    statusbar2.value += -6
+    scene.cameraShake(4, 500)
+})
+info.onLifeZero(function () {
+    game.over(false)
+})
+scene.onOverlapTile(SpriteKind.Fire, assets.tile`myTile`, function (sprite, location) {
+    tiles.setTileAt(location, assets.tile`myTile4`)
+})
+sprites.onOverlap(SpriteKind.Fire, SpriteKind.enemy2, function (sprite, otherSprite) {
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -2
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.warmRadial, 500)
+    First_dice(randint(1, 4))
+})
+sprites.onOverlap(SpriteKind.Fire, SpriteKind.Frozen, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.blizzard, 500)
+})
+sprites.onOverlap(SpriteKind.bomb, SpriteKind.Frozen, function (sprite, otherSprite) {
+    statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -1
+    info.changeLifeBy(1)
+})
+statusbars.onZero(StatusBarKind.Energy, function (status) {
+    Weakspot.setKind(SpriteKind.hollow)
+    Weakspot.setImage(img`
+        . . . . f f f f f f f . . . . . 
+        . . f f b b b f b b b f f . . . 
+        . f b b b b b f b b b b b f . . 
+        . f b b b b b f b b b b b f . . 
+        f b b b b b f f f b b b b b f . 
+        f b b b b b f f f b b b b b f . 
+        f b b b b b f f f b b b b b f . 
+        f f f f f f f f f f f f f f f . 
+        f b b b b b f f f b b b b b f . 
+        f b b b b b f f f b b b b b f . 
+        f b b b b b f f f b b b b b f . 
+        . f b b b b b f b b b b b f . . 
+        . f b b b b b f b b b b b f . . 
+        . . f f b b b f b b b f f . . . 
+        . . . . f f f f f f f . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.second, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.spray, 500)
+    game.splash("This number has been erased.")
+    Power_up_2 = 0
+})
+sprites.onOverlap(SpriteKind.Freeze, SpriteKind.Enemy, function (sprite, otherSprite) {
+    otherSprite.setImage(img`
+        . . . . . . 9 9 9 9 9 9 9 . . . 
+        . . . . . 9 9 9 9 1 9 9 9 . . . 
+        . . . 9 9 1 1 1 9 9 9 9 9 . . . 
+        . . . 9 1 1 1 1 9 1 1 9 9 . . . 
+        . . . 9 1 1 1 9 1 1 1 9 9 . . . 
+        . . . 9 9 1 1 9 1 1 1 9 . . . . 
+        . . . 9 9 9 9 9 9 9 9 1 9 9 . . 
+        . 9 9 9 9 9 9 9 1 9 1 1 9 9 . . 
+        . 9 1 9 9 9 9 9 9 1 9 1 1 1 9 . 
+        9 1 1 1 1 1 1 9 1 1 9 1 1 1 9 . 
+        . 9 1 1 1 1 9 9 1 1 9 1 1 9 9 . 
+        . 9 9 1 1 1 1 9 1 1 1 9 1 9 . . 
+        . . . 9 9 9 1 9 1 1 1 9 1 9 . . 
+        . . . . . . 9 9 9 9 9 9 1 9 . . 
+        . . . . . . . . . 9 9 9 9 9 . . 
+        . . . . . . . . . . . . . . . . 
+        `)
+    animation.stopAnimation(animation.AnimationTypes.All, otherSprite)
+    otherSprite.setKind(SpriteKind.Frozen)
+    pause(5000)
+    otherSprite.setImage(assets.image`Eyet Boll`)
+    animation.runMovementAnimation(
+    otherSprite,
+    animation.animationPresets(animation.bobbing),
+    2000,
+    true
+    )
+    otherSprite.setKind(SpriteKind.Enemy)
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += -10
     sprite.destroy()
 })
+function Chacha_slide () {
+    for (let value2 of tiles.getTilesByType(sprites.castle.tilePath8)) {
+        Enemy_side = sprites.create(assets.image`Fanshy`, SpriteKind.enemy2)
+        tiles.placeOnTile(Enemy_side, value2)
+        animation.runMovementAnimation(
+        Enemy_side,
+        animation.animationPresets(animation.bobbingRight),
+        2000,
+        true
+        )
+        animation.runMovementAnimation(
+        Enemy_side,
+        animation.animationPresets(animation.bobbingLeft),
+        2000,
+        true
+        )
+        statusbar = statusbars.create(20, 4, StatusBarKind.EnemyHealth)
+        statusbar.attachToSprite(Enemy_side)
+    }
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     scene.cameraShake(4, 500)
     Sigma.setImage(img`
@@ -1614,17 +1481,17 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         `)
     pause(1000)
 })
-let Dice: Sprite = null
-let Dice2: Sprite = null
+let Enemy_side: Sprite = null
+let statusbar: StatusBarSprite = null
 let Enemy_up_down: Sprite = null
-let fnumber: Sprite = null
 let Leech: Sprite = null
 let Ice: Sprite = null
 let flame: Sprite = null
 let projectile: Sprite = null
+let fnumber: Sprite = null
 let Right_face = false
-let statusbar: StatusBarSprite = null
-let Enemy_side: Sprite = null
+let Dice: Sprite = null
+let Dice2: Sprite = null
 let statusbar2: StatusBarSprite = null
 let Weakspot: Sprite = null
 let Chaser: Sprite = null
@@ -1652,7 +1519,7 @@ Sigma = sprites.create(img`
     . . . . f f . . . . f f . . . . 
     `, SpriteKind.Player)
 controller.moveSprite(Sigma, 100, 0)
-currentlevel = 0
+currentlevel = 8
 Levels(currentlevel)
 scene.setBackgroundColor(13)
 scene.cameraFollowSprite(Sigma)
@@ -1715,24 +1582,7 @@ game.showLongText("Good luck commander Sigma", DialogLayout.Center)
 forever(function () {
     if (1 == Power_up_2) {
         NumberB.setText("1")
-        Sp.setImage(img`
-            . . . . . . . 7 7 7 7 7 7 . . . 
-            . . . . . . 7 7 . . . . 7 7 . . 
-            7 7 . . a a a a a a a . . 7 7 . 
-            7 . . a 7 7 7 7 7 7 7 a . . . . 
-            7 7 a 7 7 7 a a a a 7 7 a . 7 7 
-            7 7 a 7 a 7 7 a 7 7 a 7 a . 7 . 
-            7 . a 7 7 a 7 7 7 7 a 7 a . 7 . 
-            7 7 a 7 a 7 7 7 7 7 7 7 a 7 7 . 
-            . 7 a 7 a 7 a a 7 7 7 7 a . 7 . 
-            . . a 7 a 7 7 7 7 7 a 7 a . 7 . 
-            . . a 7 7 7 7 a a a 7 7 a . 7 7 
-            . . . a 7 7 7 7 7 7 7 a . . . 7 
-            . . . . a a a a a a a . . . 7 7 
-            . . . . . . . 7 . . . . . 7 7 . 
-            . . 7 . . . 7 7 . . . . . . 7 . 
-            . . 7 7 7 7 7 . . . . . . . . . 
-            `)
+        Sp.setImage(assets.image`electricbogalo`)
     } else if (2 == Power_up_2) {
         NumberB.setText("2")
         Sp.setImage(img`

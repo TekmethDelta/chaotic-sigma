@@ -4,6 +4,21 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "electricbogalo"
     },
+    "image2": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAPAAAAAAAA8A8AAAD////9DwAAAP////0PAAAA////8Q8AAAD////xDwAAAP////EPAAAA/8//8Q8AAAD8/P/xDwAAAMz///EPAAAAAAAA8A8AAAAAAADwDwAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "Fanshy"
+    },
+    "image3": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAA////DwAAAPD/////AAAAHxEREf8PAPARERER8f8A8PEf8R/x/wDw8R/xH/H/APDx8R8f8f8A8PEf8R/x/wDw8R/xH/H/APARERER8f8AAB8RERH/DwAA8P////8AAAAA////DwAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "Eyet Boll"
+    },
+    "image4": {
+        "data": "hwQQABAAAAAvUiLyLyIl8hIREREREREhEhEaEREhEiEVoRcaEUIkURJ6dxchVEUiEqEXGhFCJCESERoRESESIR8RERERERHxHxERERHMEfESEZkRwbscIRKZkZHBy8shEhkRmRHMzCwVmZGRwcvLURIRmRHBuxwhEhERERHMESEvUiLyLyIl8g==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "VillainSuit"
+    },
     "*": {
         "mimeType": "image/x-mkcd-f4",
         "dataEncoding": "base64",
